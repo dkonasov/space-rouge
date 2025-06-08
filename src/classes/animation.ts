@@ -1,7 +1,7 @@
 import {
-	AnimationAction,
-	AnimationClip,
-	AnimationMixer,
+	type AnimationAction,
+	type AnimationClip,
+	type AnimationMixer,
 	Clock,
 	LoopOnce,
 } from "three";

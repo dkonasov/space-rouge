@@ -1,4 +1,4 @@
-import { Vector2 } from "three";
+import type { Vector2 } from "three";
 import { AXIS_INPUT_EVENT_NAME } from "../constants/axis-input";
 
 export interface AxisInputEventPayload {

@@ -1,5 +1,5 @@
 import { Vector2 } from "three";
-import { GameObject } from "./game-object";
+import type { GameObject } from "./game-object";
 import { GameObjectComponent } from "./game-object-component";
 import { MovementComponent } from "./movement-component";
 import { Object3DComponent } from "./object-3d-component";

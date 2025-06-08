@@ -1,13 +1,13 @@
 import {
 	AnimationClip,
 	AnimationMixer,
-	BufferGeometry,
+	type BufferGeometry,
 	Mesh,
 	MeshStandardMaterial,
 	NumberKeyframeTrack,
 	TextureLoader,
 	Vector2,
-	Vector3,
+	type Vector3,
 } from "three";
 import { GameObject } from "../classes/game-object";
 import { Object3DComponent } from "../classes/object-3d-component";

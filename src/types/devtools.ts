@@ -1,4 +1,4 @@
-import { DebugBoundsComponent } from "../classes/debug-bounds-component";
+import type { DebugBoundsComponent } from "../classes/debug-bounds-component";
 
 export interface OnRafConfig {
 	colliders: DebugBoundsComponent[];

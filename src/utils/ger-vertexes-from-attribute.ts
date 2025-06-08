@@ -1,4 +1,8 @@
-import { BufferAttribute, InterleavedBufferAttribute, Vector3 } from "three";
+import {
+	type BufferAttribute,
+	type InterleavedBufferAttribute,
+	Vector3,
+} from "three";
 
 export function getVertexesFromAttribute(
 	positionAttrib: BufferAttribute | InterleavedBufferAttribute,

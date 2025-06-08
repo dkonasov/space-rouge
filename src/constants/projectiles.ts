@@ -1,4 +1,4 @@
-import { Projectile } from "../types/projectile";
+import type { Projectile } from "../types/projectile";
 
 export const projectiles = {
 	barbaris: {

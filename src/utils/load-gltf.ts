@@ -1,4 +1,4 @@
-import { GLTF, GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { type GLTF, GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 export function loadGltf(url: string) {
 	return new Promise<GLTF>((resolve, reject) => {

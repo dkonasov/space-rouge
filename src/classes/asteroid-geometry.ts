@@ -1,13 +1,13 @@
 import {
-	PolyhedronGeometry,
+	type PolyhedronGeometry,
 	IcosahedronGeometry,
-	BufferAttribute,
-	InterleavedBufferAttribute,
+	type BufferAttribute,
+	type InterleavedBufferAttribute,
 	Vector3,
 } from "three";
 import { createNormal } from "../utils/create-normal";
 import hashObject from "object-hash";
-import { AsteroidParams } from "./asteroid-params";
+import type { AsteroidParams } from "./asteroid-params";
 
 export class AsteroidGeometry {
 	private _geometry: PolyhedronGeometry;
@@ -51,7 +51,9 @@ export class AsteroidGeometry {
 		}
 
 		let verticlesQueue: string[] = [...this._childrenMap[startVerticle]];
-		let processedVerticles = new Set<string>(this._childrenMap[startVerticle]);
+		const processedVerticles = new Set<string>(
+			this._childrenMap[startVerticle],
+		);
 		processedVerticles.add(startVerticle);
 
 		for (let i = 1; i < maxHeight; i++) {

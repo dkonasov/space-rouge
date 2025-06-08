@@ -26,7 +26,7 @@ export async function initPlayerShip() {
 	const size = 0.03;
 	shipModel.scene.scale.set(size, size, size);
 
-	let bounds = new Rectangle(0, 0);
+	const bounds = new Rectangle(0, 0);
 
 	if (shipModel.scene.children[0] instanceof Mesh) {
 		const mesh = shipModel.scene.children[0] as Mesh;

@@ -1,7 +1,7 @@
 import { consume } from "@lit/context";
 import { css, html, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
-import { Router } from "../classes/router";
+import type { Router } from "../classes/router";
 import { routerContext } from "../context/router-context";
 import { GameScreen } from "../screens/game";
 import "./game-button";

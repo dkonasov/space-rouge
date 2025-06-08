@@ -1,5 +1,5 @@
 import { Vector3 } from "three";
-import { AsteroidConfig } from "../types/asteroid-config";
+import type { AsteroidConfig } from "../types/asteroid-config";
 
 export class AsteroidParams {
 	constructor(public config: AsteroidConfig) {}

@@ -1,4 +1,4 @@
-import { Vector2 } from "three";
+import type { Vector2 } from "three";
 
 export abstract class Shape {
 	constructor() {}

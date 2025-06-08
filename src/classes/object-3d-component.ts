@@ -1,4 +1,4 @@
-import { Object3D, Scene, Vector2, Vector3 } from "three";
+import type { Object3D, Scene, Vector2, Vector3 } from "three";
 import { GameObjectComponent } from "./game-object-component";
 
 export class Object3DComponent extends GameObjectComponent {

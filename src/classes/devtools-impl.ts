@@ -1,12 +1,12 @@
 import {
-	BufferGeometry,
+	type BufferGeometry,
 	Mesh,
 	MeshBasicMaterial,
-	Object3D,
+	type Object3D,
 	PlaneGeometry,
-	Scene,
+	type Scene,
 } from "three";
-import { Devtools, OnRafConfig } from "../types/devtools";
+import type { Devtools, OnRafConfig } from "../types/devtools";
 import GUI from "lil-gui";
 import { Object3DComponent } from "./object-3d-component";
 import { Rectangle } from "./rectangle";

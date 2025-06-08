@@ -1,4 +1,4 @@
-import { LitElement, TemplateResult } from "lit";
+import { LitElement, type TemplateResult } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { MainMenuScreen } from "./screens/main-menu";
 import { provide } from "@lit/context";

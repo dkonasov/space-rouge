@@ -1,8 +1,8 @@
 import { AXIS_INPUT_EVENT_NAME } from "../constants/axis-input";
 import { PRIMARY_FIRE_TRIGGERED_EVENT_NAME } from "../constants/fire-input";
-import { AxisInputEvent } from "../types/axis-input";
+import type { AxisInputEvent } from "../types/axis-input";
 import { GameObjectComponent } from "./game-object-component";
-import { MovementComponent } from "./movement-component";
+import type { MovementComponent } from "./movement-component";
 import { WeaponComponent } from "./weapon-component";
 
 export class PlayerInputComponent extends GameObjectComponent {

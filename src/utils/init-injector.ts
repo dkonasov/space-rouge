@@ -1,6 +1,6 @@
-import { Scene } from "three";
+import type { Scene } from "three";
 import { devtoolsSymbol, injector } from "../constants/injector";
-import { Devtools } from "../types/devtools";
+import type { Devtools } from "../types/devtools";
 
 export async function initInjector(scene: Scene) {
 	let devtools: Devtools;

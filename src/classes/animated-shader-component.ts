@@ -1,4 +1,4 @@
-import { Mesh, ShaderMaterial } from "three";
+import { type Mesh, ShaderMaterial } from "three";
 import { Object3DComponent } from "./object-3d-component";
 
 type UniformFactory = (timestamp: number) => Record<string, unknown>;
@@ -59,5 +59,5 @@ export class AnimatedShaderComponent extends Object3DComponent {
 		this.additionalUnifromsFactory = factory;
 	}
 
-	private startTime: number = 0;
+	private startTime = 0;
 }

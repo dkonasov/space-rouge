@@ -1,6 +1,6 @@
-import { GameObjectComponent } from "./game-object-component";
+import type { GameObjectComponent } from "./game-object-component";
 import { Object3DComponent } from "./object-3d-component";
-import { GameScene } from "./game-scene";
+import type { GameScene } from "./game-scene";
 
 export class GameObject {
 	private components: GameObjectComponent[] = [];

@@ -1,4 +1,4 @@
-import { Enemy } from "../types/enemy";
+import type { Enemy } from "../types/enemy";
 
 export const enemies = {
 	asteroid: {

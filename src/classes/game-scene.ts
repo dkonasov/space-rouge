@@ -1,5 +1,5 @@
-import { Scene } from "three";
-import { GameObject } from "./game-object";
+import type { Scene } from "three";
+import type { GameObject } from "./game-object";
 import { getFrustrumBounds } from "../utils/get-frustrum-bounds";
 import { Object3DComponent } from "./object-3d-component";
 import { CollisionComponent } from "./collision-component";

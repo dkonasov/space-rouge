@@ -1,5 +1,5 @@
-import { Camera, WebGLRenderer } from "three";
-import { GameScene } from "./game-scene";
+import type { Camera, WebGLRenderer } from "three";
+import type { GameScene } from "./game-scene";
 
 function animate(scene: GameScene, camera: Camera, renderer: WebGLRenderer) {
 	renderer.render(scene.scene, camera);

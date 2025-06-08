@@ -1,4 +1,4 @@
-import { Devtools } from "../types/devtools";
+import type { Devtools } from "../types/devtools";
 
 export const devtoolsSymbol = Symbol("devtools");
 

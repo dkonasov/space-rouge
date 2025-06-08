@@ -1,8 +1,8 @@
 import { Vector2 } from "three";
-import { CollisionComponent } from "./collision-component";
+import type { CollisionComponent } from "./collision-component";
 import { GameObjectComponent } from "./game-object-component";
 import { Object3DComponent } from "./object-3d-component";
-import { Shape } from "./shape";
+import type { Shape } from "./shape";
 
 type TriigerHandler = (other: CollisionComponent) => void;
 

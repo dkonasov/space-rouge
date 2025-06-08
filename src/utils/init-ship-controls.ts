@@ -1,7 +1,7 @@
-import { GameObject } from "../classes/game-object";
+import type { GameObject } from "../classes/game-object";
 import { MovementComponent } from "../classes/movement-component";
 import { PlayerInputComponent } from "../classes/player-input-component";
-import { Rectangle } from "../classes/rectangle";
+import type { Rectangle } from "../classes/rectangle";
 import { RollComponent } from "../classes/roll-component";
 import { getFrustrumBounds } from "./get-frustrum-bounds";
 

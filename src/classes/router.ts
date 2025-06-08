@@ -1,4 +1,4 @@
-import { Screen } from "../types/screen";
+import type { Screen } from "../types/screen";
 
 export class Router {
 	constructor(private onScreenChange: (screen: Screen) => void) {}

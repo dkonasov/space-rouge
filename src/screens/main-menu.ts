@@ -1,5 +1,5 @@
 import { html } from "lit";
-import { Screen } from "../types/screen";
+import type { Screen } from "../types/screen";
 import "../components/main-menu";
 
 export const MainMenuScreen: Screen = () =>

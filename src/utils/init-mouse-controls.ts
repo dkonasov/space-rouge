@@ -1,6 +1,6 @@
 import { Vector2 } from "three";
 import { AXIS_INPUT_EVENT_NAME } from "../constants/axis-input";
-import { AxisInputEventPayload } from "../types/axis-input";
+import type { AxisInputEventPayload } from "../types/axis-input";
 import { PRIMARY_FIRE_TRIGGERED_EVENT_NAME } from "../constants/fire-input";
 import { effect } from "signal-utils/subtle/microtask-effect";
 import { gameLost } from "../state";
