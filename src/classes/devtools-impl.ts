@@ -27,11 +27,14 @@ export class DevtoolsImpl implements Devtools {
 	private colliderFrames: Object3D[] = [];
 
 	onRaf(config: OnRafConfig): void {
-		this.colliderFrames.forEach((obj) => this.scene.remove(obj));
+		for (const obj of this.colliderFrames) {
+			this.scene.remove(obj);
+		}
+
 		this.stats.update();
 
 		if (this.state.showColliders) {
-			config.colliders.forEach((collider) => {
+			for (const collider of config.colliders) {
 				const obj = collider.getGameObject().getComponent(Object3DComponent);
 				const shape = collider.bounds;
 
@@ -54,7 +57,7 @@ export class DevtoolsImpl implements Devtools {
 
 				this.scene.add(mesh);
 				this.colliderFrames.push(mesh);
-			});
+			}
 		}
 	}
 

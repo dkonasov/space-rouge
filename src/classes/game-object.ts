@@ -39,7 +39,13 @@ export class GameObject {
 	}
 
 	getComponent<T extends GameObjectComponent>(
-		type: new (...args: any[]) => T,
+		type: new (
+			...args: T extends abstract new (
+				...args: Array<unknown>
+			) => unknown
+				? ConstructorParameters<T>
+				: never
+		) => T,
 	): T {
 		const component = this.findComponent(type);
 
@@ -51,7 +57,13 @@ export class GameObject {
 	}
 
 	findComponent<T extends GameObjectComponent>(
-		type: new (...args: any[]) => T,
+		type: new (
+			...args: T extends abstract new (
+				...args: Array<unknown>
+			) => unknown
+				? ConstructorParameters<T>
+				: never
+		) => T,
 	): T | null {
 		const component = this.components.find((c) => c instanceof type);
 
@@ -63,7 +75,13 @@ export class GameObject {
 	}
 
 	getComponentOrNull<T extends GameObjectComponent>(
-		type: new (...args: any[]) => T,
+		type: new (
+			...args: T extends abstract new (
+				...args: Array<unknown>
+			) => unknown
+				? ConstructorParameters<T>
+				: never
+		) => T,
 	): T | null {
 		try {
 			return this.getComponent(type);

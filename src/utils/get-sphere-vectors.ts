@@ -22,9 +22,9 @@ export function getSphereVectors(segments: number) {
 
 	result.push(new Vector3(0, -0.5, 0));
 
-	result.forEach((vector) => {
+	for (const vector of result) {
 		vector.applyAxisAngle(new Vector3(1, 0, 0), baseAngle / 2);
-	});
+	}
 
 	return result;
 }

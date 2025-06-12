@@ -18,13 +18,13 @@ export class AnimatedShaderComponent extends Object3DComponent {
 			const additionalUniforms = this.additionalUnifromsFactory?.(time);
 
 			if (additionalUniforms) {
-				Object.entries(additionalUniforms).forEach(([key, value]) => {
+				for (const [key, value] of Object.entries(additionalUniforms)) {
 					if (!(this.mesh.material instanceof ShaderMaterial)) return;
 
 					if (this.mesh.material.uniforms[key]) {
 						this.mesh.material.uniforms[key].value = value;
 					}
-				});
+				}
 			}
 		}
 		requestAnimationFrame(this.onRequestAnimationFrame.bind(this));
@@ -42,13 +42,13 @@ export class AnimatedShaderComponent extends Object3DComponent {
 				const additionalUniforms = this.additionalUnifromsFactory?.(timestamp);
 
 				if (additionalUniforms) {
-					Object.entries(additionalUniforms).forEach(([key, value]) => {
+					for (const [key, value] of Object.entries(additionalUniforms)) {
 						if (!(this.mesh.material instanceof ShaderMaterial)) return;
 
 						if (this.mesh.material.uniforms[key]) {
 							this.mesh.material.uniforms[key].value = value;
 						}
-					});
+					}
 				}
 			}
 			requestAnimationFrame(this.onRequestAnimationFrame.bind(this));

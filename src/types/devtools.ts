@@ -12,4 +12,4 @@ interface DevtoolsConstructor {
 	new (): Devtools;
 }
 
-export declare var Devtools: DevtoolsConstructor;
+export declare let Devtools: DevtoolsConstructor;

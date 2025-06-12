@@ -59,7 +59,12 @@ export class AsteroidGeometry {
 		for (let i = 1; i < maxHeight; i++) {
 			const nextVerticlesQueue: string[] = [];
 			while (verticlesQueue.length) {
-				const verticle = verticlesQueue.pop()!;
+				const verticle = verticlesQueue.pop();
+
+				if (!verticle) {
+					throw new Error("Verticle is undefined");
+				}
+
 				if (this._processedVerticles.has(verticle)) {
 					return i;
 				}
@@ -97,15 +102,21 @@ export class AsteroidGeometry {
 		this._updateBounds(startVerticle);
 		this._processedVerticles.add(startVerticle);
 		let verticlesQueue: string[] = [];
-		this._childrenMap[startVerticle].forEach((child) => {
+
+		for (const child of this._childrenMap[startVerticle]) {
 			this._processedVerticles.add(child);
 			verticlesQueue.push(child);
-		});
+		}
 
 		for (let i = 2; i <= height; i++) {
 			const nextVerticlesQueue: string[] = [];
 			while (verticlesQueue.length) {
-				const verticle = verticlesQueue.pop()!;
+				const verticle = verticlesQueue.pop();
+
+				if (!verticle) {
+					throw new Error("Verticle is undefined");
+				}
+
 				this._moveVertex(verticle, normal, getLengthFn(i, height) * sign);
 				const children = Array.from(
 					this._childrenMap[verticle].values(),
@@ -146,7 +157,7 @@ export class AsteroidGeometry {
 		for (let i = 2; i < this._verticesList.length; i += 3) {
 			const triangle = this._verticesList.slice(i - 2, i + 1);
 
-			triangle.forEach((vertex, index) => {
+			for (const [index, vertex] of triangle.entries()) {
 				if (!this._childrenMap[vertex]) {
 					this._childrenMap[vertex] = new Set();
 				}
@@ -154,10 +165,17 @@ export class AsteroidGeometry {
 				const prevElemIndex = index - 1;
 				const nextElemIndex = (index + 1) % 3;
 
-				this._childrenMap[vertex].add(triangle.at(prevElemIndex)!);
+				const prevElem = triangle.at(prevElemIndex);
+				const nextElem = triangle.at(nextElemIndex);
 
-				this._childrenMap[vertex].add(triangle.at(nextElemIndex)!);
-			});
+				if (!prevElem || !nextElem) {
+					throw new Error("Triangle vertex is undefined");
+				}
+
+				this._childrenMap[vertex].add(prevElem);
+
+				this._childrenMap[vertex].add(nextElem);
+			}
 		}
 
 		while (this._unprocessedVerticles.length) {
