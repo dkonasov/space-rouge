@@ -17,7 +17,7 @@ let interval: number;
 
 const MAX_DIFFICULTY_LEVEL = 10;
 let difficultyChangedAt = Date.now();
-const DIFFICULTY_INCREASE_PERIOD = 1000 * 10;
+const DIFFICULTY_INCREASE_PERIOD = 1000 * 1;
 let level = -1;
 
 function getSpawnInterval() {
@@ -115,7 +115,7 @@ export async function spawnEnemies(scene: GameScene) {
 			const geometries = await Promise.all(promises);
 
 			const fieldWidth = frustrumBounds.right - frustrumBounds.left;
-			const margin = 0.2;
+			const margin = 0.3;
 			const segmentWidth = Math.max(margin * 2, fieldWidth / enemiesCount);
 
 			for (let i = 0; i < enemiesCount; i++) {

@@ -11,7 +11,7 @@ function getLengthFn(level: number, maxLevel: number) {
 }
 
 const asteroidParams = new AsteroidParams({
-	maxHeight: 3,
+	maxHeight: 0.1,
 	scale: minAsteroidScale
 		.clone()
 		.add(

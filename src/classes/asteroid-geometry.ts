@@ -5,33 +5,16 @@ import {
 	type InterleavedBufferAttribute,
 	Vector3,
 } from "three";
-import { createNormal } from "../utils/create-normal";
-import hashObject from "object-hash";
 import type { AsteroidParams } from "./asteroid-params";
+import { createNoise3D } from "simplex-noise";
 
 export class AsteroidGeometry {
 	private _geometry: PolyhedronGeometry;
 	private _positionAttribute: BufferAttribute | InterleavedBufferAttribute;
-	private _verticesList: string[];
-	private _verticesSet: Set<string>;
-	private _verticesMap: Record<string, number[]>;
-	private _childrenMap: Record<string, Set<string>>;
-	private _processedVerticles: Set<string> = new Set();
-	private _unprocessedVerticles: string[] = [];
+	private _noiseGenerator = createNoise3D();
 	public boundingBox = new Vector3();
 
-	private _moveVertex(vertexId: string, vector: Vector3, length: number) {
-		const increment = vector.clone().multiplyScalar(length);
-		this._verticesMap[vertexId][0] += increment.x;
-		this._verticesMap[vertexId][1] += increment.y;
-		this._verticesMap[vertexId][2] += increment.z;
-	}
-
-	private _updateBounds(vertexId: string) {
-		const x = this._verticesMap[vertexId][0];
-		const y = this._verticesMap[vertexId][1];
-		const z = this._verticesMap[vertexId][2];
-
+	private _updateBounds(x: number, y: number, z: number) {
 		if (x > this.boundingBox.x / 2 || x < -this.boundingBox.x / 2) {
 			this.boundingBox.x = Math.abs(x) * 2;
 		}
@@ -45,156 +28,36 @@ export class AsteroidGeometry {
 		}
 	}
 
-	private _getAvailableHeight(startVerticle: string, maxHeight: number) {
-		if (this._processedVerticles.has(startVerticle)) {
-			return 0;
-		}
-
-		let verticlesQueue: string[] = [...this._childrenMap[startVerticle]];
-		const processedVerticles = new Set<string>(
-			this._childrenMap[startVerticle],
-		);
-		processedVerticles.add(startVerticle);
-
-		for (let i = 1; i < maxHeight; i++) {
-			const nextVerticlesQueue: string[] = [];
-			while (verticlesQueue.length) {
-				const verticle = verticlesQueue.pop();
-
-				if (!verticle) {
-					throw new Error("Verticle is undefined");
-				}
-
-				if (this._processedVerticles.has(verticle)) {
-					return i;
-				}
-
-				const children = Array.from(
-					this._childrenMap[verticle].values(),
-				).filter((child) => !processedVerticles.has(child));
-				nextVerticlesQueue.push(...children);
-				processedVerticles.add(verticle);
-			}
-
-			verticlesQueue = nextVerticlesQueue;
-		}
-
-		return maxHeight;
-	}
-
-	private _createMountainOrDeep(height: number, startVerticle: string) {
-		const testVerticleChidlren = Array.from(
-			this._childrenMap[startVerticle].values(),
-		);
-		const { getLengthFn } = this.params.config;
-
-		const sign = Math.random() > 0.5 ? 1 : -1;
-
-		const verticlesCoords = [
-			this._verticesMap[testVerticleChidlren[0]],
-			this._verticesMap[testVerticleChidlren[1]],
-			this._verticesMap[testVerticleChidlren[2]],
-		];
-
-		const normal = createNormal(verticlesCoords);
-
-		this._moveVertex(startVerticle, normal, getLengthFn(1, height) * sign);
-		this._updateBounds(startVerticle);
-		this._processedVerticles.add(startVerticle);
-		let verticlesQueue: string[] = [];
-
-		for (const child of this._childrenMap[startVerticle]) {
-			this._processedVerticles.add(child);
-			verticlesQueue.push(child);
-		}
-
-		for (let i = 2; i <= height; i++) {
-			const nextVerticlesQueue: string[] = [];
-			while (verticlesQueue.length) {
-				const verticle = verticlesQueue.pop();
-
-				if (!verticle) {
-					throw new Error("Verticle is undefined");
-				}
-
-				this._moveVertex(verticle, normal, getLengthFn(i, height) * sign);
-				const children = Array.from(
-					this._childrenMap[verticle].values(),
-				).filter((child) => !this._processedVerticles.has(child));
-				nextVerticlesQueue.push(...children);
-			}
-
-			verticlesQueue = nextVerticlesQueue;
-		}
-	}
-
 	constructor(private params: AsteroidParams) {
 		const geometry = new IcosahedronGeometry(1, 6);
 		this._positionAttribute = geometry.getAttribute("position");
-
-		this._verticesSet = new Set<string>();
-		this._verticesList = [];
-		this._verticesMap = {};
 
 		const { scale, maxHeight } = this.params.config;
 
 		geometry.scale(scale.x, scale.y, scale.z);
 
+		const noiseScale = 7;
+
 		for (let i = 0; i < this._positionAttribute.count; i++) {
 			const x = this._positionAttribute.getX(i);
 			const y = this._positionAttribute.getY(i);
 			const z = this._positionAttribute.getZ(i);
-			const hash = hashObject([x, y, z]);
-			this._verticesMap[hash] = [x, y, z];
-			this._verticesList.push(hash);
-			this._verticesSet.add(hash);
-		}
 
-		this._unprocessedVerticles = [...this._verticesSet];
+			const magnitude =
+				(this._noiseGenerator(x * noiseScale, y * noiseScale, z * noiseScale) +
+					1) /
+				2;
+			const baseVector = new Vector3(x, y, z);
+			const basis = baseVector.clone().normalize();
+			const offset = basis.multiplyScalar(magnitude * maxHeight);
 
-		this._childrenMap = {};
+			const newX = x + offset.x;
+			const newY = y + offset.y;
+			const newZ = z + offset.z;
 
-		for (let i = 2; i < this._verticesList.length; i += 3) {
-			const triangle = this._verticesList.slice(i - 2, i + 1);
+			this._positionAttribute.setXYZ(i, newX, newY, newZ);
 
-			for (const [index, vertex] of triangle.entries()) {
-				if (!this._childrenMap[vertex]) {
-					this._childrenMap[vertex] = new Set();
-				}
-
-				const prevElemIndex = index - 1;
-				const nextElemIndex = (index + 1) % 3;
-
-				const prevElem = triangle.at(prevElemIndex);
-				const nextElem = triangle.at(nextElemIndex);
-
-				if (!prevElem || !nextElem) {
-					throw new Error("Triangle vertex is undefined");
-				}
-
-				this._childrenMap[vertex].add(prevElem);
-
-				this._childrenMap[vertex].add(nextElem);
-			}
-		}
-
-		while (this._unprocessedVerticles.length) {
-			const height = Math.floor(Math.random() * maxHeight) + 1;
-			const index = Math.floor(
-				Math.random() * this._unprocessedVerticles.length,
-			);
-			const elem = this._unprocessedVerticles.splice(index, 1)[0];
-			const availableHeight = this._getAvailableHeight(elem, height);
-			if (availableHeight === 0) {
-				continue;
-			}
-			this._createMountainOrDeep(availableHeight, elem);
-		}
-
-		for (let i = 0; i < this._verticesList.length; i++) {
-			const verticle = this._verticesMap[this._verticesList[i]];
-
-			this._positionAttribute.setXYZ(i, verticle[0], verticle[1], verticle[2]);
+			this._updateBounds(newX, newY, newZ);
 		}
 
 		this._geometry = geometry;
