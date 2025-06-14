@@ -101,7 +101,7 @@ export class MovementComponent extends GameObjectComponent {
 	}
 
 	private velocity: Vector2 = new Vector2();
-	private stopTime = 10;
+	private stopTime = 30;
 	private stopTimeout: number | null = null;
 	private constraints: MovementComponentConstraints = {};
 	private inert = false;

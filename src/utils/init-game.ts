@@ -17,7 +17,7 @@ export async function initGame(parent: HTMLElement | DocumentFragment) {
 	});
 
 	const { scene, camera, renderer } = initRenderer();
-	await initInjector(scene);
+	await initInjector(scene, renderer);
 
 	parent.appendChild(renderer.domElement);
 

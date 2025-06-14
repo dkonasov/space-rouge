@@ -5,6 +5,7 @@ import {
 	type Object3D,
 	PlaneGeometry,
 	type Scene,
+	type WebGLRenderer,
 } from "three";
 import type { Devtools, OnRafConfig } from "../types/devtools";
 import GUI from "lil-gui";
@@ -12,6 +13,7 @@ import { Object3DComponent } from "./object-3d-component";
 import { Rectangle } from "./rectangle";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import "../components/perfomance-metrics";
+import { AXIS_INPUT_EVENT_NAME } from "../constants/axis-input";
 
 interface State {
 	showColliders: boolean;
@@ -61,7 +63,10 @@ export class DevtoolsImpl implements Devtools {
 		}
 	}
 
-	constructor(private scene: Scene) {
+	constructor(
+		private scene: Scene,
+		renderer: WebGLRenderer,
+	) {
 		const gui = new GUI();
 		document.body.appendChild(this.stats.dom);
 		gui.add(this.state, "showColliders");
@@ -69,5 +74,9 @@ export class DevtoolsImpl implements Devtools {
 		const pmComponent = document.createElement("performance-metrics");
 
 		document.body.appendChild(pmComponent);
+
+		renderer.domElement.addEventListener(AXIS_INPUT_EVENT_NAME, () => {
+			console.debug("Axis input event");
+		});
 	}
 }
