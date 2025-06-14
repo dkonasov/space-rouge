@@ -17,7 +17,7 @@ let interval: number;
 
 const MAX_DIFFICULTY_LEVEL = 10;
 let difficultyChangedAt = Date.now();
-const DIFFICULTY_INCREASE_PERIOD = 1000 * 1;
+const DIFFICULTY_INCREASE_PERIOD = 1000 * 20;
 let level = -1;
 
 function getSpawnInterval() {
