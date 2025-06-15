@@ -1,17 +1,24 @@
 import { type Mesh, ShaderMaterial } from "three";
 import { Object3DComponent } from "./object-3d-component";
+import { effect } from "signal-utils/subtle/microtask-effect";
+import { gamePaused } from "../state";
 
 type UniformFactory = (timestamp: number) => Record<string, unknown>;
 
 export class AnimatedShaderComponent extends Object3DComponent {
 	private additionalUnifromsFactory: UniformFactory | null = null;
+	private gamePausedAt = -1;
+	private timeShift = 0;
 
 	private onRequestAnimationFrame(timestamp: number) {
-		if (this.getGameObject().markedForDeletion) return;
+		if (this.getGameObject().markedForDeletion) {
+			this.cancelEffect();
+			return;
+		}
 
-		const time = timestamp - this.startTime;
+		const time = timestamp - this.startTime - this.timeShift;
 
-		if (this.mesh.material instanceof ShaderMaterial) {
+		if (this.mesh.material instanceof ShaderMaterial && this.gamePausedAt < 0) {
 			this.mesh.material.uniformsNeedUpdate = true;
 			this.mesh.material.uniforms.u_time.value = time;
 
@@ -53,6 +60,17 @@ export class AnimatedShaderComponent extends Object3DComponent {
 			}
 			requestAnimationFrame(this.onRequestAnimationFrame.bind(this));
 		});
+
+		this.cancelEffect = effect(() => {
+			if (gamePaused.get()) {
+				this.gamePausedAt = performance.now();
+			}
+
+			if (this.gamePausedAt >= 0 && !gamePaused.get()) {
+				this.timeShift += performance.now() - this.gamePausedAt;
+				this.gamePausedAt = -1;
+			}
+		});
 	}
 
 	setAdditionalUniformsFactory(factory: UniformFactory) {
@@ -60,4 +78,5 @@ export class AnimatedShaderComponent extends Object3DComponent {
 	}
 
 	private startTime = 0;
+	private cancelEffect: () => void;
 }

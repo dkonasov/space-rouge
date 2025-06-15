@@ -1,6 +1,7 @@
 import { Vector2 } from "three";
 import { GameObjectComponent } from "./game-object-component";
 import { Object3DComponent } from "./object-3d-component";
+import { gamePaused } from "../state";
 
 export interface MovementComponentConstraints {
 	top?: number;
@@ -25,7 +26,7 @@ export class MovementComponent extends GameObjectComponent {
 
 		const deltaTime = time - this.timeFromLastUpdate;
 
-		if (deltaTime < UPDATE_PERIOD) {
+		if (deltaTime < UPDATE_PERIOD || gamePaused.get()) {
 			requestAnimationFrame(this.onRequestAnimationFrame.bind(this));
 			return;
 		}

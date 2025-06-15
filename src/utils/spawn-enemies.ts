@@ -5,7 +5,7 @@ import { generateAsteroid } from "./generate-asteroid";
 import { getFrustrumBounds } from "./get-frustrum-bounds";
 import { MovementComponent } from "../classes/movement-component";
 import AsteroidGeometryGenerator from "./workers/generate-asteroid-geometry.ts?worker";
-import { gameLost } from "../state";
+import { gameLost, gamePaused } from "../state";
 import { effect } from "signal-utils/subtle/microtask-effect";
 
 const frustrumBounds = getFrustrumBounds();
@@ -14,6 +14,8 @@ let spawnIntervalMax = 1000;
 let minEnemiesPerRow = 6;
 let maxEnemiesPerRow = 10;
 let interval: number;
+let difficultyLevelTimeDelta = 0;
+let gameWasPaused = false;
 
 const MAX_DIFFICULTY_LEVEL = 10;
 let difficultyChangedAt = Date.now();
@@ -46,9 +48,9 @@ function increaseLevel() {
 	maxEnemiesPerRow = enemiesPerRow[1];
 }
 
-function startLevelChanging() {
+function startLevelChanging(baseLevel = 0) {
 	difficultyChangedAt = Date.now();
-	level = -1;
+	level = baseLevel - 1;
 	increaseLevel();
 	interval = setInterval(() => {
 		if (Date.now() - difficultyChangedAt >= DIFFICULTY_INCREASE_PERIOD) {
@@ -73,6 +75,17 @@ effect(() => {
 	}
 });
 
+effect(() => {
+	if (gamePaused.get()) {
+		clearInterval(interval);
+		difficultyLevelTimeDelta = Date.now() - difficultyChangedAt;
+		gameWasPaused = true;
+	} else if (gameWasPaused) {
+		difficultyChangedAt = Date.now() - difficultyLevelTimeDelta;
+		startLevelChanging(level);
+	}
+});
+
 export async function spawnEnemies(scene: GameScene) {
 	let lastSpawnTimestamp = -1;
 	let spawnInterval =
@@ -82,7 +95,8 @@ export async function spawnEnemies(scene: GameScene) {
 		if (
 			(lastSpawnTimestamp === -1 ||
 				time - lastSpawnTimestamp > spawnInterval) &&
-			!gameLost.get()
+			!gameLost.get() &&
+			!gamePaused.get()
 		) {
 			lastSpawnTimestamp = time;
 			spawnInterval =

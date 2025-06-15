@@ -1,8 +1,9 @@
 import { GameRenderer } from "../classes/game-renderer";
 import { GameScene } from "../classes/game-scene";
-import { gameLost } from "../state";
+import { gameLost, gameStarted } from "../state";
 import { initBackground } from "./init-background";
 import { initInjector } from "./init-injector";
+import { initKeyboardControls } from "./init-keyboard-controls";
 import { initMouseControls } from "./init-mouse-controls";
 import { initPlayerShip } from "./init-player-ship";
 import { initRenderer } from "./init-renderer";
@@ -28,6 +29,7 @@ export async function initGame(parent: HTMLElement | DocumentFragment) {
 	gameScene.addGameObject(backgroundObject);
 
 	initMouseControls(renderer.domElement);
+	initKeyboardControls();
 
 	spawnEnemies(gameScene);
 
@@ -41,4 +43,6 @@ export async function initGame(parent: HTMLElement | DocumentFragment) {
 			initShipControls(shipObject, renderer.domElement, bounds);
 		}
 	});
+
+	gameStarted.set(true);
 }
