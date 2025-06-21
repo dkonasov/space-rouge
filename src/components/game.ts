@@ -6,6 +6,7 @@ import { SignalWatcher } from "@lit-labs/signals";
 import { gameLost, gamePaused } from "../state";
 import "./player-score";
 import "./health-bar";
+import "./pause-dialog";
 import { BACK_COMMAND_EVENT_NAME } from "../constants/common-commands";
 
 @customElement("space-rouge-game")
@@ -30,6 +31,7 @@ export class Game extends SignalWatcher(LitElement) {
         <space-rouge-game-canvas></space-rouge-game-canvas>
         <player-score></player-score>
         <health-bar></health-bar>
+		<pause-dialog></pause-dialog>
       </div>
     `;
 	}
