@@ -5,6 +5,7 @@ import type { Router } from "../classes/router";
 import { routerContext } from "../context/router-context";
 import { GameScreen } from "../screens/game";
 import "./game-button";
+import { SettingsScreen } from "../screens/settings-screen";
 
 @customElement("space-rouge-main-menu")
 export class MainMenu extends LitElement {
@@ -16,6 +17,12 @@ export class MainMenu extends LitElement {
       height: 100vh;
       width: 100vw;
     }
+
+	.menuInner {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
   `;
 
 	@consume({ context: routerContext })
@@ -25,10 +32,20 @@ export class MainMenu extends LitElement {
 		this._routerContext.goToScreen(GameScreen);
 	}
 
+	private _goToSettings() {
+		this._routerContext.goToScreen(SettingsScreen);
+	}
+
 	render() {
-		return html`<game-button @click="${this._startGame}">
-      Start Game
-    </game-button>`;
+		return html`
+		<div class="menuInner">
+			<game-button @click="${this._startGame}">
+				Start Game
+			</game-button>
+			<game-button @click="${this._goToSettings}">
+				Settings
+			</game-button>
+		</div>`;
 	}
 }
 

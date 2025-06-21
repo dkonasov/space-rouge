@@ -3,7 +3,7 @@ import { AXIS_INPUT_EVENT_NAME } from "../constants/axis-input";
 import type { AxisInputEventPayload } from "../types/axis-input";
 import { PRIMARY_FIRE_TRIGGERED_EVENT_NAME } from "../constants/fire-input";
 import { effect } from "signal-utils/subtle/microtask-effect";
-import { gameLost } from "../state";
+import { gameLost, inverseX, inverseY } from "../state";
 import { BACK_COMMAND_EVENT_NAME } from "../constants/common-commands";
 
 export function initMouseControls(canvasElement: HTMLCanvasElement) {
@@ -30,10 +30,16 @@ export function initMouseControls(canvasElement: HTMLCanvasElement) {
 			return;
 		}
 
+		const directionX = inverseX.get() ? -1 : 1;
+		const directionY = inverseY.get() ? -1 : 1;
+
 		canvasElement.dispatchEvent(
 			new CustomEvent<AxisInputEventPayload>(AXIS_INPUT_EVENT_NAME, {
 				detail: {
-					vector: new Vector2(event.movementX, event.movementY),
+					vector: new Vector2(
+						event.movementX * directionX,
+						event.movementY * directionY,
+					),
 				},
 			}),
 		);

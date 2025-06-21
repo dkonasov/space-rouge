@@ -8,6 +8,7 @@ export class GameButton extends LitElement {
       background: #fff;
       color: #000;
       font-size: 24px;
+	  width: 100%;
     }
   `;
 

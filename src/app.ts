@@ -1,11 +1,12 @@
-import { LitElement, type TemplateResult } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { css, html, LitElement } from "lit";
+import { customElement } from "lit/decorators.js";
 import { MainMenuScreen } from "./screens/main-menu";
 import { provide } from "@lit/context";
 import { routerContext } from "./context/router-context";
 import { Router } from "./classes/router";
 import { isMobile } from "is-mobile";
 import { UnsupportedDeviceScreen } from "./screens/unsopported-device-screen";
+import "./components/router-outlet";
 
 /**
  * An example element.
@@ -15,18 +16,20 @@ import { UnsupportedDeviceScreen } from "./screens/unsopported-device-screen";
  */
 @customElement("space-rouge-app")
 export class App extends LitElement {
-	@state()
-	private screen: TemplateResult = isMobile()
-		? UnsupportedDeviceScreen()
-		: MainMenuScreen();
+	static styles = css`
+	:host {
+		display: block;
+		height: 100vh;
+	}
+	`;
 
 	@provide({ context: routerContext })
-	router: Router = new Router((screen) => {
-		this.screen = screen();
-	});
+	router: Router = new Router(
+		isMobile() ? UnsupportedDeviceScreen : MainMenuScreen,
+	);
 
 	render() {
-		return this.screen;
+		return html`<router-outlet></router-outlet>`;
 	}
 }
 

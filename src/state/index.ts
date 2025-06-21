@@ -5,3 +5,5 @@ export const score = signal(0);
 export const health = signal(100);
 export const gamePaused = signal(false);
 export const gameStarted = signal(false);
+export const inverseX = signal(false);
+export const inverseY = signal(false);
