@@ -14,7 +14,9 @@ const pointerLockChangeHandler = () => {
 
 export function initMouseControls(canvasElement: HTMLCanvasElement) {
 	canvasElement.addEventListener("click", () => {
-		canvasElement.requestPointerLock();
+		if (!gameLost.get()) {
+			canvasElement.requestPointerLock();
+		}
 	});
 
 	canvasElement.addEventListener("pointerdown", () => {
