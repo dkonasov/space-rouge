@@ -6,15 +6,13 @@ import { effect } from "signal-utils/subtle/microtask-effect";
 import { gameLost, inverseX, inverseY } from "../state";
 import { BACK_COMMAND_EVENT_NAME } from "../constants/common-commands";
 
+const pointerLockChangeHandler = () => {
+	if (!document.pointerLockElement && !gameLost.get()) {
+		document.dispatchEvent(new CustomEvent(BACK_COMMAND_EVENT_NAME));
+	}
+};
+
 export function initMouseControls(canvasElement: HTMLCanvasElement) {
-	canvasElement.requestPointerLock();
-
-	document.addEventListener("pointerlockchange", () => {
-		if (!document.pointerLockElement && !gameLost.get()) {
-			document.dispatchEvent(new CustomEvent(BACK_COMMAND_EVENT_NAME));
-		}
-	});
-
 	canvasElement.addEventListener("click", () => {
 		canvasElement.requestPointerLock();
 	});
@@ -43,11 +41,17 @@ export function initMouseControls(canvasElement: HTMLCanvasElement) {
 				},
 			}),
 		);
+	});
 
-		effect(() => {
-			if (!gameLost.get()) {
-				canvasElement.requestPointerLock();
-			}
-		});
+	effect(async () => {
+		if (!gameLost.get()) {
+			await canvasElement.requestPointerLock();
+			document.addEventListener("pointerlockchange", pointerLockChangeHandler);
+		} else {
+			document.removeEventListener(
+				"pointerlockchange",
+				pointerLockChangeHandler,
+			);
+		}
 	});
 }
